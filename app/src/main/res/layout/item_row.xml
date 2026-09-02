@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingStart="12dp"
+    android:paddingEnd="8dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:background="#DEDEDE">
+
+    <!-- Item information -->
+    <!-- Item information -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/itemName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Apple"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                android:id="@+id/itemCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Category"
+                android:textColor="@color/black"
+                android:textSize="11sp"
+                android:background="@color/white"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/itemDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date"
+                android:textColor="@color/black"
+                android:textSize="11sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <!-- Quantity control -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:padding="5dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="#FFFFFF"
+        android:layout_marginStart="8dp">
+
+        <ImageButton
+            android:id="@+id/decButton"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/minus"
+            android:contentDescription="Decrease quantity"
+            android:padding="8dp" />
+
+        <TextView
+            android:id="@+id/itemQty"
+            android:layout_width="36dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/incButton"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/plus"
+            android:contentDescription="Increase quantity"
+            android:padding="8dp" />
+
+    </LinearLayout>
+
+
+    <!-- Delete -->
+    <ImageButton
+        android:id="@+id/deleteButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="4dp"
+        android:src="@android:drawable/ic_menu_delete"
+        android:background="@android:color/white"
+        android:contentDescription="Delete item"
+        android:padding="10dp" />
+</LinearLayout>
