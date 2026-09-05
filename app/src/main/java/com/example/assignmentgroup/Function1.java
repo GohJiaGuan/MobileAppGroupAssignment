@@ -42,6 +42,8 @@ public class Function1 extends AppCompatActivity  implements InventoryAdapter.Li
     private MaterialButton takePhotoButton, uploadPhotoButton;
     private ActivityResultLauncher<Void> cameraLauncher;
     private ActivityResultLauncher<String> galleryLauncher;
+    private String lastAiCategory;
+    private String lastAiRecommendation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,9 +119,11 @@ public class Function1 extends AppCompatActivity  implements InventoryAdapter.Li
 
         GeminiService.identifyMaterial(BuildConfig.GEMINI_API_KEY, stream.toByteArray(), new GeminiService.MaterialCallback() {
             @Override
-            public void onResult(String material) {
+            public void onResult(String material, String recommendation) {
                 runOnUiThread(() -> {
                     categoryInput.setText(material);
+                    lastAiCategory = material;
+                    lastAiRecommendation = recommendation;
                     setScanButtonsEnabled(true);
                     Toast.makeText(Function1.this, "Detected: " + material, Toast.LENGTH_SHORT).show();
                 });
@@ -186,7 +190,9 @@ public class Function1 extends AppCompatActivity  implements InventoryAdapter.Li
     }
 
     private void showRecyclingOutcome(String category) {
-        String tips = RecyclingAdvice.tipsFor(category);
+        boolean fromAiScan = lastAiRecommendation != null && category.equalsIgnoreCase(lastAiCategory);
+        String tips = fromAiScan ? lastAiRecommendation : RecyclingAdvice.tipsFor(category);
+
         StringBuilder message = new StringBuilder(tips).append("\n\nNearby centres:\n");
         for (String centre : RecyclingAdvice.mockCentresFor(category)) {
             message.append("- ").append(centre).append("\n");
@@ -197,6 +203,9 @@ public class Function1 extends AppCompatActivity  implements InventoryAdapter.Li
                 .setMessage(message.toString().trim())
                 .setPositiveButton("Got it", null)
                 .show();
+
+        lastAiCategory = null;
+        lastAiRecommendation = null;
     }
 
     @Override

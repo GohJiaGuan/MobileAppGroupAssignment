@@ -10,6 +10,6 @@ import retrofit2.http.POST;
 
 public interface GeminiApiService {
 
-    @POST("models/gemini-3.1-flash-lite:generateContent")
+    @POST("models/gemini-3.7-flash:generateContent")
     Call<GeminiResponse> generateContent(@Header("x-goog-api-key") String apiKey, @Body GeminiRequest request);
 }

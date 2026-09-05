@@ -19,18 +19,21 @@ import okhttp3.Response;
 public class GeminiService {
 
     private static final String ENDPOINT =
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=";
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent?key=";
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private static final String PROMPT =
-            "You are a waste-sorting assistant. Look at this photo of a household waste item " +
-            "and reply with ONLY the material category, 1-3 words, chosen from: " +
-            "Plastic, Paper, Glass, Metal, E-waste, Organic, Textile, Other. " +
-            "Do not add punctuation or explanation.";
+            "You are a waste-sorting assistant. Look closely at this photo of a household waste item " +
+            "- read any visible text, labels, or recycling symbols on it. Reply in EXACTLY this format, " +
+            "two lines, nothing else:\n" +
+            "CATEGORY: <one word from Plastic, Paper, Glass, Metal, E-waste, Organic, Textile, Other>\n" +
+            "RECOMMENDATION: <2-3 sentences of specific 5R disposal advice for THIS exact item, " +
+            "referencing what you actually see in the photo - e.g. the specific product, packaging type, " +
+            "or any recycling code/label visible - rather than generic advice for the category as a whole>";
 
     private static final OkHttpClient client = new OkHttpClient();
 
     public interface MaterialCallback {
-        void onResult(String material);
+        void onResult(String material, String recommendation);
         void onError(String message);
     }
 
@@ -79,12 +82,18 @@ public class GeminiService {
                         callback.onError("API error " + resp.code() + ": " + bodyString);
                         return;
                     }
-                    String material = parseMaterial(bodyString);
-                    if (material == null) {
+                    String text = extractResponseText(bodyString);
+                    if (text == null) {
                         callback.onError("Could not parse AI response.");
-                    } else {
-                        callback.onResult(material);
+                        return;
                     }
+                    String category = extractField(text, "CATEGORY");
+                    String recommendation = extractField(text, "RECOMMENDATION");
+                    if (category == null) {
+                        callback.onError("Could not parse AI response.");
+                        return;
+                    }
+                    callback.onResult(category, recommendation);
                 } catch (JSONException e) {
                     callback.onError("Failed to parse response: " + e.getMessage());
                 }
@@ -92,7 +101,7 @@ public class GeminiService {
         });
     }
 
-    private static String parseMaterial(String responseBody) throws JSONException {
+    private static String extractResponseText(String responseBody) throws JSONException {
         JSONObject root = new JSONObject(responseBody);
         JSONArray candidates = root.optJSONArray("candidates");
         if (candidates == null || candidates.length() == 0) return null;
@@ -104,9 +113,18 @@ public class GeminiService {
         if (parts == null || parts.length() == 0) return null;
 
         String text = parts.getJSONObject(0).optString("text", "").trim();
-        if (text.isEmpty()) return null;
+        return text.isEmpty() ? null : text;
+    }
 
-        String firstLine = text.split("\\r?\\n")[0].trim();
-        return firstLine.replaceAll("[.\"']", "");
+    private static String extractField(String text, String label) {
+        for (String line : text.split("\\r?\\n")) {
+            line = line.trim();
+            String prefix = label + ":";
+            if (line.regionMatches(true, 0, prefix, 0, prefix.length())) {
+                String value = line.substring(prefix.length()).trim();
+                return value.isEmpty() ? null : value;
+            }
+        }
+        return null;
     }
 }
