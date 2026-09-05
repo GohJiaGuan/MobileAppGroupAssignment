@@ -62,8 +62,8 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:padding="5dp"
+        android:layout_height="48dp"
+        android:padding="4dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:background="#FFFFFF"
@@ -71,11 +71,11 @@
 
         <ImageButton
             android:id="@+id/decButton"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="@drawable/minus"
             android:contentDescription="Decrease quantity"
-            android:padding="8dp" />
+            android:padding="10dp" />
 
         <TextView
             android:id="@+id/itemQty"
@@ -89,31 +89,31 @@
 
         <ImageButton
             android:id="@+id/incButton"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="@drawable/plus"
             android:contentDescription="Increase quantity"
-            android:padding="8dp" />
+            android:padding="10dp" />
 
     </LinearLayout>
 
     <ImageButton
         android:id="@+id/askAiButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
         android:layout_marginStart="4dp"
         android:src="@drawable/ic_chat"
         android:background="@android:color/white"
         android:contentDescription="Ask AI about this item"
-        android:padding="9dp" />
+        android:padding="10dp" />
 
     <ImageButton
         android:id="@+id/deleteButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
         android:layout_marginStart="4dp"
         android:src="@android:drawable/ic_menu_delete"
         android:background="@android:color/white"
         android:contentDescription="Delete item"
-        android:padding="10dp" />
+        android:padding="11dp" />
 </LinearLayout>

@@ -4,7 +4,10 @@
     <color name="white">#FFFFFFFF</color>
     <color name="primary_green">#2E7D32</color>
     <color name="light_gray">#E0E0E0</color>
-    <color name="light_gray_text">#777777</color>
+    <color name="light_gray_text">#6E7B65</color>
+
+    <color name="lime_accent">#AEEA00</color>
+    <color name="lime_accent_dark">#7CB342</color>
 
     <color name="eco_green">#2E7D32</color>
     <color name="eco_green_dark">#1B5E20</color>

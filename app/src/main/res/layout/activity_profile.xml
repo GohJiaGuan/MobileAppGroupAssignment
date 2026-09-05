@@ -46,7 +46,7 @@
             android:text="Logout"
             android:textAllCaps="false"
             android:textColor="@color/black"
-            android:backgroundTint="#C6FCBB" />
+            android:backgroundTint="@color/lime_accent" />
 
     </LinearLayout>
 

@@ -1,7 +1,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Base.Theme.AssignmentGroup" parent="Theme.Material3.DayNight.NoActionBar">
-
+        <item name="colorPrimary">@color/primary_green</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/lime_accent</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/text_dark</item>
+        <item name="android:colorBackground">#F6FBEE</item>
+        <item name="colorOnBackground">@color/text_dark</item>
     </style>
 
     <style name="Theme.AssignmentGroup" parent="Base.Theme.AssignmentGroup" />

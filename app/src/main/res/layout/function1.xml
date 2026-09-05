@@ -198,7 +198,7 @@
                     android:textSize="16sp"
                     app:cornerRadius="8dp"
                     android:textColor="@color/black"
-                    app:backgroundTint="#03FC28" />
+                    app:backgroundTint="@color/lime_accent" />
 
             </LinearLayout>
 

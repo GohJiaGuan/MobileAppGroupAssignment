@@ -90,7 +90,7 @@
             android:layout_marginTop="20dp"
             android:text="LOGIN"
             android:textColor="@color/black"
-            android:backgroundTint="#C6FCBB" />
+            android:backgroundTint="@color/lime_accent" />
 
         <TextView
             android:id="@+id/tvGoRegister"
@@ -178,7 +178,7 @@
             android:layout_marginTop="20dp"
             android:text="REGISTER"
             android:textColor="@color/black"
-            android:backgroundTint="#C6FCBB" />
+            android:backgroundTint="@color/lime_accent" />
 
         <TextView
             android:id="@+id/tvGoLogin"

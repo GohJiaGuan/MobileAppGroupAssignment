@@ -1,6 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Base.Theme.AssignmentGroup" parent="Theme.Material3.DayNight.NoActionBar">
-
+        <item name="colorPrimary">#8BC34A</item>
+        <item name="colorOnPrimary">#0E1A0A</item>
+        <item name="colorSecondary">@color/lime_accent</item>
+        <item name="colorOnSecondary">#0E1A0A</item>
+        <item name="colorSurface">#1B2418</item>
+        <item name="colorOnSurface">#E8F3E0</item>
+        <item name="android:colorBackground">#12190F</item>
+        <item name="colorOnBackground">#E8F3E0</item>
     </style>
 </resources>
