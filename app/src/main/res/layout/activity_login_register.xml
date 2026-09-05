@@ -10,6 +10,18 @@
     android:background="@drawable/bg_gradient"
     tools:context=".RegisterAndLogin">
 
+    <TextView
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:text="&#8592; Back"
+        android:textColor="@color/primary_green"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <!-- App Name -->
     <TextView
         android:id="@+id/tvTitle"

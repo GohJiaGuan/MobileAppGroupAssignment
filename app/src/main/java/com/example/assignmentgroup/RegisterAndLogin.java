@@ -28,10 +28,16 @@ public class RegisterAndLogin extends AppCompatActivity {
         EditText etRegisterPassword;
         EditText etRegisterConfirmPassword;
 
+        AuthManager authManager;
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_login_register);
+            EdgeToEdgeUtil.apply(this);
+
+            authManager = new AuthManager(this);
+            findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
             // Layouts
             loginLayout = findViewById(R.id.loginLayout);
@@ -88,6 +94,11 @@ public class RegisterAndLogin extends AppCompatActivity {
                     return;
                 }
 
+                if (!authManager.login(email, password)) {
+                    Toast.makeText(RegisterAndLogin.this, "Invalid email or password", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Toast.makeText(
                         RegisterAndLogin.this,
                         "Login successful",
@@ -95,6 +106,7 @@ public class RegisterAndLogin extends AppCompatActivity {
                 ).show();
                 Intent intent = new Intent(RegisterAndLogin.this, MainActivity.class);
                 startActivity(intent);
+                finish();
 
             });
 
@@ -139,12 +151,19 @@ public class RegisterAndLogin extends AppCompatActivity {
                     return;
                 }
 
+                if (!authManager.register(name, email, password)) {
+                    etRegisterEmail.setError("An account with this email already exists");
+                    return;
+                }
 
                 Toast.makeText(
                         RegisterAndLogin.this,
                         "Registration successful",
                         Toast.LENGTH_SHORT
                 ).show();
+                Intent intent = new Intent(RegisterAndLogin.this, MainActivity.class);
+                startActivity(intent);
+                finish();
 
             });
         }

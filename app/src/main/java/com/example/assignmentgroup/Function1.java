@@ -1,20 +1,30 @@
 package com.example.assignmentgroup;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,11 +38,16 @@ public class Function1 extends AppCompatActivity  implements InventoryAdapter.Li
 
     private EditText nameInput, qtyInput, categoryInput;
     private TextView statText;
+    private ImageView photoPreview;
+    private MaterialButton takePhotoButton, uploadPhotoButton;
+    private ActivityResultLauncher<Void> cameraLauncher;
+    private ActivityResultLauncher<String> galleryLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.function1); // Fixed: Changed from activity_main to function1
+        EdgeToEdgeUtil.apply(this);
 
         prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
@@ -40,17 +55,84 @@ public class Function1 extends AppCompatActivity  implements InventoryAdapter.Li
         qtyInput = findViewById(R.id.qtyInput);
         categoryInput = findViewById(R.id.categoryInput);
         statText = findViewById(R.id.statText);
+        photoPreview = findViewById(R.id.photoPreview);
+        takePhotoButton = findViewById(R.id.takePhotoButton);
+        uploadPhotoButton = findViewById(R.id.uploadPhotoButton);
 
         RecyclerView recyclerView = findViewById(R.id.itemsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new InventoryAdapter(items, this);
         recyclerView.setAdapter(adapter);
 
+        cameraLauncher = registerForActivityResult(
+                new ActivityResultContracts.TakePicturePreview(),
+                bitmap -> {
+                    if (bitmap != null) onPhotoReady(bitmap);
+                });
+
+        galleryLauncher = registerForActivityResult(
+                new ActivityResultContracts.GetContent(),
+                uri -> {
+                    if (uri != null) {
+                        Bitmap bitmap = loadBitmapFromUri(uri);
+                        if (bitmap != null) onPhotoReady(bitmap);
+                        else Toast.makeText(this, "Could not read that image.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
         findViewById(R.id.addButton).setOnClickListener(v -> onAddClicked());
         findViewById(R.id.button4).setOnClickListener(v -> clearAllItems());
+        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
+        takePhotoButton.setOnClickListener(v -> cameraLauncher.launch(null));
+        uploadPhotoButton.setOnClickListener(v -> galleryLauncher.launch("image/*"));
 
         loadItems();
         updateStat();
+    }
+
+    private Bitmap loadBitmapFromUri(Uri uri) {
+        try (InputStream inputStream = getContentResolver().openInputStream(uri)) {
+            return BitmapFactory.decodeStream(inputStream);
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    private void onPhotoReady(Bitmap bitmap) {
+        photoPreview.setVisibility(android.view.View.VISIBLE);
+        photoPreview.setImageBitmap(bitmap);
+        identifyMaterial(bitmap);
+    }
+
+    private void setScanButtonsEnabled(boolean enabled) {
+        takePhotoButton.setEnabled(enabled);
+        uploadPhotoButton.setEnabled(enabled);
+    }
+
+    private void identifyMaterial(Bitmap bitmap) {
+        setScanButtonsEnabled(false);
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+
+        GeminiService.identifyMaterial(BuildConfig.GEMINI_API_KEY, stream.toByteArray(), new GeminiService.MaterialCallback() {
+            @Override
+            public void onResult(String material) {
+                runOnUiThread(() -> {
+                    categoryInput.setText(material);
+                    setScanButtonsEnabled(true);
+                    Toast.makeText(Function1.this, "Detected: " + material, Toast.LENGTH_SHORT).show();
+                });
+            }
+
+            @Override
+            public void onError(String message) {
+                runOnUiThread(() -> {
+                    setScanButtonsEnabled(true);
+                    Toast.makeText(Function1.this, message, Toast.LENGTH_LONG).show();
+                });
+            }
+        });
     }
     private void addItem(String name, int qty, String category) {
         name = name.trim();
@@ -94,11 +176,26 @@ public class Function1 extends AppCompatActivity  implements InventoryAdapter.Li
         }
 
         addItem(name, qty, category);
+        showRecyclingOutcome(category);
 
         nameInput.setText("");
         qtyInput.setText("");
         categoryInput.setText("");
         nameInput.requestFocus();
+    }
+
+    private void showRecyclingOutcome(String category) {
+        String tips = RecyclingAdvice.tipsFor(category);
+        StringBuilder message = new StringBuilder(tips).append("\n\nNearby centres:\n");
+        for (String centre : RecyclingAdvice.mockCentresFor(category)) {
+            message.append("- ").append(centre).append("\n");
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle("Disposal recommendation")
+                .setMessage(message.toString().trim())
+                .setPositiveButton("Got it", null)
+                .show();
     }
 
     @Override

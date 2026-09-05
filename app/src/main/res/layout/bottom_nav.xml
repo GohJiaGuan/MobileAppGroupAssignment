@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/bottomNav"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:orientation="horizontal"
+    android:background="@color/white"
+    android:elevation="8dp">
+
+    <TextView
+        android:id="@+id/navHome"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Home"
+        android:textColor="#777777"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/navHistory"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="History"
+        android:textColor="#777777"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/navSaved"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Saved"
+        android:textColor="#777777"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/navProfile"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Profile"
+        android:textColor="#777777"
+        android:textSize="12sp" />
+
+</LinearLayout>

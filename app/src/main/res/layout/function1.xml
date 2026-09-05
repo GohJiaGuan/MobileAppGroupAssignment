@@ -10,14 +10,27 @@
     android:background="@drawable/bg_gradient">
 
     <TextView
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:text="&#8592; Back"
+        android:textColor="@color/primary_green"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
         android:id="@+id/tvItemsTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="Items Listed"
         android:textColor="@color/black"
         android:textSize="34sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnBack"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -138,6 +151,50 @@
                             android:maxLines="1" />
 
                     </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <!-- AI Scan Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/photoPreview"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginEnd="12dp"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone"
+                        android:contentDescription="Captured item photo" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/takePhotoButton"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:text="Take Photo"
+                        android:textAllCaps="false"
+                        android:textSize="14sp"
+                        app:cornerRadius="8dp"
+                        android:textColor="@color/black"
+                        app:backgroundTint="#E0E0E0" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/uploadPhotoButton"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="Upload"
+                        android:textAllCaps="false"
+                        android:textSize="14sp"
+                        app:cornerRadius="8dp"
+                        android:textColor="@color/black"
+                        app:backgroundTint="#E0E0E0" />
 
                 </LinearLayout>
 
