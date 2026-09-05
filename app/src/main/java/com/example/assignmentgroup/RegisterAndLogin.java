@@ -39,37 +39,31 @@ public class RegisterAndLogin extends AppCompatActivity {
             authManager = new AuthManager(this);
             findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
-            // Layouts
             loginLayout = findViewById(R.id.loginLayout);
             registerLayout = findViewById(R.id.registerLayout);
 
-            // TextViews
             tvGoRegister = findViewById(R.id.tvGoRegister);
             tvGoLogin = findViewById(R.id.tvGoLogin);
 
-            // Buttons
             btnLogin = findViewById(R.id.btnLogin);
             btnRegister = findViewById(R.id.btnRegister);
 
-            // Login fields
             etLoginEmail = findViewById(R.id.etLoginEmail);
             etLoginPassword = findViewById(R.id.etLoginPassword);
 
-            // Register fields
             etRegisterName = findViewById(R.id.etRegisterName);
             etRegisterEmail = findViewById(R.id.etRegisterEmail);
             etRegisterPassword = findViewById(R.id.etRegisterPassword);
             etRegisterConfirmPassword =
                     findViewById(R.id.etRegisterConfirmPassword);
 
-//Register field
             tvGoRegister.setOnClickListener(v -> {
 
                 loginLayout.setVisibility(View.GONE);
                 registerLayout.setVisibility(View.VISIBLE);
 
             });
-//Login field
+
             tvGoLogin.setOnClickListener(v -> {
 
                 registerLayout.setVisibility(View.GONE);
@@ -77,8 +71,6 @@ public class RegisterAndLogin extends AppCompatActivity {
 
             });
 
-
-//LOGIN BUTTON
             btnLogin.setOnClickListener(v -> {
 
                 String email = etLoginEmail.getText().toString().trim();
@@ -110,8 +102,6 @@ public class RegisterAndLogin extends AppCompatActivity {
 
             });
 
-
-// REGISTER BUTTON
             btnRegister.setOnClickListener(v -> {
 
                 String name = etRegisterName.getText().toString().trim();
@@ -120,7 +110,6 @@ public class RegisterAndLogin extends AppCompatActivity {
                         etRegisterPassword.getText().toString().trim();
                 String confirmPassword =
                         etRegisterConfirmPassword.getText().toString().trim();
-
 
                 if (name.isEmpty()) {
                     etRegisterName.setError("Please enter your name");
@@ -168,4 +157,3 @@ public class RegisterAndLogin extends AppCompatActivity {
             });
         }
     }
-
