@@ -32,7 +32,7 @@ public class Function1 extends AppCompatActivity  implements InventoryAdapter.Li
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.function1); // Fixed: Changed from activity_main to function1
+        setContentView(R.layout.function1);
 
         prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 

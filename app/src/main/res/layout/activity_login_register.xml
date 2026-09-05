@@ -10,7 +10,6 @@
     android:background="@drawable/bg_gradient"
     tools:context=".RegisterAndLogin">
 
-    <!-- App Name -->
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
@@ -24,7 +23,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- LOGIN SECTION -->
     <LinearLayout
         android:id="@+id/loginLayout"
         android:layout_width="0dp"
@@ -94,8 +92,6 @@
 
     </LinearLayout>
 
-
-    <!-- REGISTER SECTION -->
     <LinearLayout
         android:id="@+id/registerLayout"
         android:layout_width="0dp"

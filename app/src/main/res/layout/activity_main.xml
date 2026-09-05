@@ -10,8 +10,6 @@
     android:background="@drawable/bg_gradient"
     tools:context=".MainActivity">
 
-
-    <!-- App Title -->
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -26,8 +24,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-
-    <!-- Tagline -->
     <TextView
         android:id="@+id/textView2"
         android:layout_width="0dp"
@@ -41,8 +37,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-
-    <!-- Main Feature Card -->
     <LinearLayout
         android:id="@+id/buttonContainer"
         android:layout_width="0dp"
@@ -57,8 +51,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-
-        <!-- Card Title -->
         <TextView
             android:layout_width="315dp"
             android:layout_height="wrap_content"
@@ -67,8 +59,6 @@
             android:textSize="22sp"
             android:textStyle="bold" />
 
-
-        <!-- Card Description -->
         <TextView
             android:layout_width="315dp"
             android:layout_height="wrap_content"
@@ -78,8 +68,6 @@
             android:textColor="#777777"
             android:textSize="14sp" />
 
-
-        <!-- Scan Button -->
         <Button
             android:id="@+id/button"
             android:layout_width="match_parent"
@@ -92,8 +80,6 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
-
-        <!-- Education Button -->
         <Button
             android:id="@+id/button2"
             android:layout_width="match_parent"
@@ -108,8 +94,6 @@
 
     </LinearLayout>
 
-
-    <!-- Bottom Text -->
     <TextView
         android:id="@+id/tvBottom"
         android:layout_width="wrap_content"

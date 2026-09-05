@@ -39,12 +39,12 @@ public class MainActivity extends AppCompatActivity {
         Button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                Toast.makeText(MainActivity.this, "Opening Function 2", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                Toast.makeText(MainActivity.this, "Opening 5R Education Space", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this,
+                        com.example.assignmentgroup.encyclopedia.EncyclopediaHomeActivity.class);
                 startActivity(intent);
             }
         });
     }
-
 
 }

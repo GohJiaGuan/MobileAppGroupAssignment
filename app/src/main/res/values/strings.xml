@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">AssignmentGroup</string>
+
+    <string name="article_detail_title">Article</string>
+    <string name="ask_ai_title">Ask AI Assistant</string>
+    <string name="search_hint">Search materials, topics\u2026</string>
+    <string name="ask_ai_title_card">Ask AI Assistant</string>
+    <string name="ask_ai_subtitle_card">Type any question about the 5Rs</string>
+    <string name="categories_header">Categories</string>
+    <string name="popular_articles_header">Popular Articles</string>
+    <string name="refresh_articles_content_description">Refresh articles using AI</string>
+    <string name="refresh_articles_toast">Refreshing articles from AI\u2026</string>
+    <string name="refresh_articles_failed_toast">Couldn\'t refresh from AI \u2013 check your API key and internet connection.</string>
+    <string name="chat_input_hint">Type your question\u2026</string>
 </resources>

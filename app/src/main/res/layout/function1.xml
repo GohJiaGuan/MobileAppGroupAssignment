@@ -33,11 +33,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-
-    <!-- ========================= -->
-    <!-- MAIN CARD -->
-    <!-- ========================= -->
-
     <androidx.cardview.widget.CardView
         android:id="@+id/tableCard"
         android:layout_width="0dp"
@@ -52,14 +47,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- CardView MUST have only ONE direct child -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="20dp"
             android:background="#F5F5F5">
-
 
             <TextView
                 android:id="@+id/tvInventoryDescription"
@@ -81,7 +74,6 @@
                 android:background="@drawable/input_card_background"
                 android:elevation="4dp">
 
-                <!-- Name Input -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -97,14 +89,12 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Quantity and Category Row -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:orientation="horizontal">
 
-                    <!-- Quantity Input -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -121,7 +111,6 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Category Input -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -141,7 +130,6 @@
 
                 </LinearLayout>
 
-                <!-- Add Button -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/addButton"
                     android:layout_width="match_parent"
@@ -155,7 +143,6 @@
                     app:backgroundTint="#03FC28" />
 
             </LinearLayout>
-
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/itemsRecyclerView"
@@ -178,7 +165,6 @@
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
-<!-- CLEAR ALL BUTTON -->
 
     <Button
         android:id="@+id/button4"
