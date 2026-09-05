@@ -134,13 +134,13 @@ public class Function1 extends AppCompatActivity  implements InventoryAdapter.Li
             }
         });
     }
-    private void addItem(String name, int qty, String category) {
+    private boolean addItem(String name, int qty, String category) {
         name = name.trim();
         category = category.trim();
 
         if (TextUtils.isEmpty(name)) {
             Toast.makeText(this, "Please insert the product name.", Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
         if (qty <= 0) qty = 1;
 
@@ -152,7 +152,7 @@ public class Function1 extends AppCompatActivity  implements InventoryAdapter.Li
                 adapter.notifyDataSetChanged();
                 saveItems();
                 updateStat();
-                return;
+                return true;
             }
         }
 
@@ -160,6 +160,7 @@ public class Function1 extends AppCompatActivity  implements InventoryAdapter.Li
         adapter.notifyItemInserted(items.size() - 1);
         saveItems();
         updateStat();
+        return true;
     }
 
     private void onAddClicked() {
@@ -175,7 +176,7 @@ public class Function1 extends AppCompatActivity  implements InventoryAdapter.Li
             return;
         }
 
-        addItem(name, qty, category);
+        if (!addItem(name, qty, category)) return;
         showRecyclingOutcome(category);
 
         nameInput.setText("");
