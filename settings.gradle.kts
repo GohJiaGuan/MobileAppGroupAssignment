@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "AssignmentGroup"
+rootProject.name = "Recira"
 include(":app")

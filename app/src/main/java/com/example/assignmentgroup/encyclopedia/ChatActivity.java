@@ -21,6 +21,8 @@ import com.example.assignmentgroup.encyclopedia.network.ChatRepository;
 
 public class ChatActivity extends AppCompatActivity {
 
+    public static final String EXTRA_PREFILL_MESSAGE = "prefill_message";
+
     private AppDatabase db;
     private ChatAdapter chatAdapter;
     private ChatRepository chatRepository;
@@ -60,6 +62,12 @@ public class ChatActivity extends AppCompatActivity {
         }
         chatAdapter.submitAll(history);
         scrollToBottom();
+
+        String prefill = getIntent().getStringExtra(EXTRA_PREFILL_MESSAGE);
+        if (prefill != null) {
+            messageInput.setText(prefill);
+            messageInput.setSelection(prefill.length());
+        }
 
         sendButton.setOnClickListener(v -> {
             String text = messageInput.getText().toString().trim();

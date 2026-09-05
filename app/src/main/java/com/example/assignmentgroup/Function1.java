@@ -1,4 +1,5 @@
 package com.example.assignmentgroup;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -181,7 +182,7 @@ public class Function1 extends AppCompatActivity  implements InventoryAdapter.Li
         }
 
         if (!addItem(name, qty, category)) return;
-        showRecyclingOutcome(category);
+        showRecyclingOutcome(name.trim(), category);
 
         nameInput.setText("");
         qtyInput.setText("");
@@ -189,7 +190,7 @@ public class Function1 extends AppCompatActivity  implements InventoryAdapter.Li
         nameInput.requestFocus();
     }
 
-    private void showRecyclingOutcome(String category) {
+    private void showRecyclingOutcome(String name, String category) {
         boolean fromAiScan = lastAiRecommendation != null && category.equalsIgnoreCase(lastAiCategory);
         String tips = fromAiScan ? lastAiRecommendation : RecyclingAdvice.tipsFor(category);
 
@@ -198,9 +199,17 @@ public class Function1 extends AppCompatActivity  implements InventoryAdapter.Li
             message.append("- ").append(centre).append("\n");
         }
 
+        String chatPrefill = "I just logged \"" + name + "\" (category: " + category
+                + ") in Recycle with AI. " + tips + " Can you tell me more about disposing of it properly?";
+
         new AlertDialog.Builder(this)
                 .setTitle("Disposal recommendation")
                 .setMessage(message.toString().trim())
+                .setNeutralButton("Ask AI more", (dialog, which) -> {
+                    Intent intent = new Intent(this, com.example.assignmentgroup.encyclopedia.ChatActivity.class);
+                    intent.putExtra(com.example.assignmentgroup.encyclopedia.ChatActivity.EXTRA_PREFILL_MESSAGE, chatPrefill);
+                    startActivity(intent);
+                })
                 .setPositiveButton("Got it", null)
                 .show();
 
