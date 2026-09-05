@@ -17,6 +17,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
         void onIncrease(int position);
         void onDecrease(int position);
         void onDelete(int position);
+        void onAskAi(int position);
     }
 
     private final List<Item> items;
@@ -54,6 +55,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
         holder.incBtn.setOnClickListener(v -> listener.onIncrease(holder.getAdapterPosition()));
         holder.decBtn.setOnClickListener(v -> listener.onDecrease(holder.getAdapterPosition()));
         holder.deleteBtn.setOnClickListener(v -> listener.onDelete(holder.getAdapterPosition()));
+        holder.askAiBtn.setOnClickListener(v -> listener.onAskAi(holder.getAdapterPosition()));
     }
 
     @Override
@@ -63,7 +65,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView name, qty, category, date;
-        ImageButton incBtn, decBtn, deleteBtn;
+        ImageButton incBtn, decBtn, deleteBtn, askAiBtn;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -74,6 +76,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
             incBtn = itemView.findViewById(R.id.incButton);
             decBtn = itemView.findViewById(R.id.decButton);
             deleteBtn = itemView.findViewById(R.id.deleteButton);
+            askAiBtn = itemView.findViewById(R.id.askAiButton);
         }
     }
 }

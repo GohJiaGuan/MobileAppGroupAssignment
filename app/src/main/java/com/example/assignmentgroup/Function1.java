@@ -205,16 +205,29 @@ public class Function1 extends AppCompatActivity  implements InventoryAdapter.Li
         new AlertDialog.Builder(this)
                 .setTitle("Disposal recommendation")
                 .setMessage(message.toString().trim())
-                .setNeutralButton("Ask AI more", (dialog, which) -> {
-                    Intent intent = new Intent(this, com.example.assignmentgroup.encyclopedia.ChatActivity.class);
-                    intent.putExtra(com.example.assignmentgroup.encyclopedia.ChatActivity.EXTRA_PREFILL_MESSAGE, chatPrefill);
-                    startActivity(intent);
-                })
+                .setNeutralButton("Ask AI more", (dialog, which) -> openChatWithPrefill(chatPrefill))
                 .setPositiveButton("Got it", null)
                 .show();
 
         lastAiCategory = null;
         lastAiRecommendation = null;
+    }
+
+    private void openChatWithPrefill(String prefill) {
+        Intent intent = new Intent(this, com.example.assignmentgroup.encyclopedia.ChatActivity.class);
+        intent.putExtra(com.example.assignmentgroup.encyclopedia.ChatActivity.EXTRA_PREFILL_MESSAGE, prefill);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onAskAi(int position) {
+        if (position < 0 || position >= items.size()) return;
+        Item item = items.get(position);
+        String category = item.Category == null || item.Category.trim().isEmpty() ? "Other" : item.Category;
+        String prefill = "I have \"" + item.name + "\" (category: " + category
+                + ") logged in Recycle with AI. " + RecyclingAdvice.tipsFor(category)
+                + " Can you tell me more about disposing of it properly?";
+        openChatWithPrefill(prefill);
     }
 
     @Override
