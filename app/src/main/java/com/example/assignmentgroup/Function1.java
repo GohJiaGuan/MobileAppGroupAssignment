@@ -1,8 +1,12 @@
 package com.example.assignmentgroup;
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,6 +19,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
@@ -45,6 +50,9 @@ public class Function1 extends AppCompatActivity  implements InventoryAdapter.Li
     private ActivityResultLauncher<String> galleryLauncher;
     private String lastAiCategory;
     private String lastAiRecommendation;
+    private ActivityResultLauncher<String> locationPermissionLauncher;
+    private String pendingOutcomeName;
+    private String pendingOutcomeCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +89,17 @@ public class Function1 extends AppCompatActivity  implements InventoryAdapter.Li
                         if (bitmap != null) onPhotoReady(bitmap);
                         else Toast.makeText(this, "Could not read that image.", Toast.LENGTH_SHORT).show();
                     }
+                });
+
+        locationPermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                granted -> {
+                    if (pendingOutcomeName == null) return;
+                    String name = pendingOutcomeName;
+                    String category = pendingOutcomeCategory;
+                    pendingOutcomeName = null;
+                    pendingOutcomeCategory = null;
+                    fetchNearbyCentresAndShowOutcome(name, category);
                 });
 
         findViewById(R.id.addButton).setOnClickListener(v -> onAddClicked());
@@ -182,7 +201,7 @@ public class Function1 extends AppCompatActivity  implements InventoryAdapter.Li
         }
 
         if (!addItem(name, qty, category)) return;
-        showRecyclingOutcome(name.trim(), category);
+        fetchNearbyCentresAndShowOutcome(name.trim(), category);
 
         nameInput.setText("");
         qtyInput.setText("");
@@ -190,12 +209,110 @@ public class Function1 extends AppCompatActivity  implements InventoryAdapter.Li
         nameInput.requestFocus();
     }
 
-    private void showRecyclingOutcome(String name, String category) {
+    private void fetchNearbyCentresAndShowOutcome(String name, String category) {
+        boolean hasPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED;
+
+        if (!hasPermission) {
+            pendingOutcomeName = name;
+            pendingOutcomeCategory = category;
+            locationPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION);
+            return;
+        }
+
+        Location cached = getLastKnownLocation();
+        if (cached != null) {
+            lookupCentres(cached, name, category);
+            return;
+        }
+
+        requestFreshLocation(name, category);
+    }
+
+    private void requestFreshLocation(String name, String category) {
+        LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (lm == null) {
+            showRecyclingOutcomeWithMock(name, category);
+            return;
+        }
+
+        String provider = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                ? LocationManager.GPS_PROVIDER
+                : lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER) ? LocationManager.NETWORK_PROVIDER : null;
+        if (provider == null) {
+            showRecyclingOutcomeWithMock(name, category);
+            return;
+        }
+
+        final boolean[] handled = {false};
+        android.location.LocationListener listener = new android.location.LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                if (handled[0]) return;
+                handled[0] = true;
+                lm.removeUpdates(this);
+                lookupCentres(location, name, category);
+            }
+        };
+
+        try {
+            lm.requestLocationUpdates(provider, 0, 0, listener, android.os.Looper.getMainLooper());
+        } catch (SecurityException e) {
+            showRecyclingOutcomeWithMock(name, category);
+            return;
+        }
+
+        new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+            if (handled[0]) return;
+            handled[0] = true;
+            lm.removeUpdates(listener);
+            showRecyclingOutcomeWithMock(name, category);
+        }, 8000);
+    }
+
+    private void lookupCentres(Location location, String name, String category) {
+        NearbyRecyclingService.findNearby(location.getLatitude(), location.getLongitude(), new NearbyRecyclingService.Callback2() {
+            @Override
+            public void onResult(List<String> centres) {
+                runOnUiThread(() -> showRecyclingOutcome(name, category, centres));
+            }
+
+            @Override
+            public void onError(String message) {
+                runOnUiThread(() -> showRecyclingOutcomeWithMock(name, category));
+            }
+        });
+    }
+
+    private void showRecyclingOutcomeWithMock(String name, String category) {
+        showRecyclingOutcome(name, category, java.util.Arrays.asList(RecyclingAdvice.mockCentresFor(category)));
+    }
+
+    private Location getLastKnownLocation() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            return null;
+        }
+        LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (lm == null) return null;
+
+        for (String provider : new String[]{LocationManager.GPS_PROVIDER, LocationManager.NETWORK_PROVIDER, LocationManager.PASSIVE_PROVIDER}) {
+            try {
+                Location location = lm.getLastKnownLocation(provider);
+                if (location != null) return location;
+            } catch (SecurityException | IllegalArgumentException ignored) {
+                // provider unavailable on this device - try the next one
+            }
+        }
+        return null;
+    }
+
+    private void showRecyclingOutcome(String name, String category, List<String> centres) {
         boolean fromAiScan = lastAiRecommendation != null && category.equalsIgnoreCase(lastAiCategory);
         String tips = fromAiScan ? lastAiRecommendation : RecyclingAdvice.tipsFor(category);
 
         StringBuilder message = new StringBuilder(tips).append("\n\nNearby centres:\n");
-        for (String centre : RecyclingAdvice.mockCentresFor(category)) {
+        for (String centre : centres) {
             message.append("- ").append(centre).append("\n");
         }
 
